@@ -1,0 +1,77 @@
+<!--包含头部文件-->
+{include file="public/header" /}
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 团购商品列表 </nav>
+<div class="page-container">
+<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+	<div class="text-c">
+		<form method="get" action="{:url('deal/index')}">
+		 <span class="select-box inline">
+			<select name="category_id" class="select">
+				<option value="0">全部分类</option>
+				{volist name="categorys" id="cate"}
+				<option value="{$cate->id}"  {if $cate->id==$category_id} selected="selected" {/if}>{$cate->name}</option>
+				{/volist}
+			</select>
+		</span>
+		<span class="select-box inline">
+			<select name="city_id" class="select">
+				<option value="0">全部城市</option>
+				{volist name="citys" id="city"}
+				<option value="{$city->id}" {if $city->id==$city_id} selected="selected" {/if}>{$city->name}</option>
+				{/volist}
+			</select>
+		</span> 日期范围：
+		<input type="text" name="start_time" class="input-text" readonly="readonly" autocomplete="off" id="countTimestart" onfocus="selecttime(1)" value="{$start_time}" style="width:120px;" >
+			-
+		<input type="text" name="end_time" class="input-text" readonly="readonly"  autocomplete="off" id="countTimestart" onfocus="selecttime(1)" value="{$end_time}"  style="width:120px;">
+		<input type="text" value="{$name}" name="name" id="" placeholder=" 商品名称" style="width:250px" class="input-text">
+		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索
+		</button>
+		</form>
+	</div>
+</div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="20">ID</th>
+					<th width="30">排序序号</th>
+					<th width="100">商品名称</th>
+					<th width="40">栏目分类</th>
+					<th width="40">城市</th>
+					<th width="40">购买件数</th>
+					<th width="80">开始结束时间</th>
+					<th width="80">创建时间</th>
+					<th width="60">状态</th>
+					<th width="40">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{volist name="deals" id="deal"} 
+				<tr class="text-c">
+					<td>{$deal->id}</td>
+					<td class="text-c listorder"><input type="text" size="3" style="text-align: center;" attr-id="{$deal->id}" name="listorder" value="{$deal->listorder}"></td>
+					<td>{$deal->name}</td>
+					<td>{$deal->category_id|getCategoryName}</td>
+					<td>{$deal->city_id|getSecityName}</td>
+					<td>{$deal->total_count}</td>
+					<td>{$deal->start_time|timetostr} - {$deal->end_time|timetostr}</td>
+					<td>{$deal->create_time}</td>
+					<td><a href="{:url('deal/status',['id'=>$deal->id,'status'=>0])}" title="点击修改状态">{$deal->status|status}</a></td>
+					<td class="td-manage"><a style="text-decoration:none" class="ml-5" onClick="" href="javascript:;" title="查看"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+				</tr>
+				{/volist}
+			</tbody>
+		</table>
+	</div>
+</div>
+{:pagination($deals)}
+<script>
+	var SCOPE={
+		'listorder_url':"{:url('deal/listorder')}",
+	};
+</script>
+<!--包含头部文件-->
+{include file="public/footer" /}
+<script src="__ADMIN__/lib/My97DatePicker/WdatePicker.js"></script>
